@@ -12,11 +12,4 @@ interface GifApi {
         @Query("limit") limit: Int = 20,
         @Query("offset") offset: Int = 0
     ): GiphyResponse
-
-    // Trending endpoint
-    @GET("gifs/trending")
-    suspend fun getTrendingGifs(
-        @Query("api_key") apiKey: String,
-        @Query("limit") limit: Int = 20
-    ): GiphyResponse
 }

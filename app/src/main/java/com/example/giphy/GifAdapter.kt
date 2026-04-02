@@ -22,8 +22,7 @@ class GifAdapter(private var gifs: List<GifObject>) :
 
     override fun onBindViewHolder(holder: GifViewHolder, position: Int) {
         val gifUrl = gifs[position].images.fixed_height.url
-        holder.imageView.load(gifUrl) {
-        }
+        holder.imageView.load(gifUrl)
     }
 
     override fun getItemCount() = gifs.size

@@ -13,6 +13,8 @@ class MainActivity : AppCompatActivity() {
     private val viewModel = GifViewModel()
     private lateinit var adapter: GifAdapter
 
+    private var currentQuery = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -31,16 +33,29 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Load trending GIFs
-        viewModel.loadTrending()
-
         // Search listener
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                viewModel.searchGifs(query ?: "")
+                currentQuery = query ?: ""
+                viewModel.searchGifs(currentQuery)
                 return true
             }
             override fun onQueryTextChange(newText: String?) = false
+        })
+
+        //Scroll listener
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy <= 0) return
+
+                val layoutManager = recyclerView.layoutManager as GridLayoutManager
+                val totalItemCount = layoutManager.itemCount
+                val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+
+                if (lastVisibleItem + 5 >= totalItemCount) {
+                    viewModel.searchGifs(currentQuery, isNextPage = true)
+                }
+            }
         })
     }
 }
