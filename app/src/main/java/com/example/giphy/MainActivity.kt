@@ -7,8 +7,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 
 class MainActivity : AppCompatActivity() {
+
+    //Instant search
+    private var searchJob: Job? = null
 
     private val viewModel = GifViewModel()
     private lateinit var adapter: GifAdapter
@@ -26,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = GridLayoutManager(this, 2)
         recyclerView.adapter = adapter
 
-        // Observe GIFs from ViewModel
+        // observe gifs from viewmodel
         lifecycleScope.launch {
             viewModel.gifs.collect { gifs ->
                 adapter.updateGifs(gifs)
@@ -35,12 +40,27 @@ class MainActivity : AppCompatActivity() {
 
         // Search listener
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                currentQuery = query ?: ""
-                viewModel.searchGifs(currentQuery)
+            override fun onQueryTextSubmit(query: String?) = false
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                val query = newText ?: ""
+
+
+                searchJob?.cancel()
+
+
+                searchJob = lifecycleScope.launch {
+                    delay(500)
+                    if (query.isNotBlank()) {
+                        currentQuery = query
+                        viewModel.searchGifs(currentQuery)
+                    } else {
+                        currentQuery = ""
+                        viewModel.searchGifs("")
+                    }
+                }
                 return true
             }
-            override fun onQueryTextChange(newText: String?) = false
         })
 
         //Scroll listener
