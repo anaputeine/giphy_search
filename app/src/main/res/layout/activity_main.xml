@@ -18,7 +18,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:queryHint="Search GIFs..."
-            android:saveEnabled="false"/>
+            android:saveEnabled="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:iconifiedByDefault="true"/>
 
         <ProgressBar
             android:id="@+id/progressBar"

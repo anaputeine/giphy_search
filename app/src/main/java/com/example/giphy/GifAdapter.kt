@@ -1,5 +1,6 @@
 package com.example.giphy
 
+import android.R.attr.onClick
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,7 +8,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 
-class GifAdapter(private var gifs: List<GifObject>) :
+class GifAdapter(private var gifs: List<GifObject>,private val onClick: (GifObject) -> Unit) :
     RecyclerView.Adapter<GifAdapter.GifViewHolder>() {
 
     inner class GifViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -23,6 +24,14 @@ class GifAdapter(private var gifs: List<GifObject>) :
     override fun onBindViewHolder(holder: GifViewHolder, position: Int) {
         val gifUrl = gifs[position].images.fixed_height.url
         holder.imageView.load(gifUrl)
+
+
+        //OnClick event
+        val gif = gifs[position]
+        holder.itemView.setOnClickListener {
+            onClick(gif)
+        }
+
     }
 
     override fun getItemCount() = gifs.size

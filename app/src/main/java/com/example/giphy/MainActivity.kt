@@ -1,5 +1,6 @@
 package com.example.giphy
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
@@ -45,7 +46,11 @@ class MainActivity : AppCompatActivity() {
 
 
         // showing the grid
-        adapter = GifAdapter(emptyList())
+        adapter = GifAdapter(emptyList()) { gif ->
+            val intent = Intent(this, GifActivity::class.java)
+            intent.putExtra("gif_url", gif.images.fixed_height.url)
+            startActivity(intent)
+        }
         recyclerView.layoutManager = GridLayoutManager(this, 2)
         recyclerView.adapter = adapter
 
