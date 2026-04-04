@@ -1,6 +1,8 @@
 package com.example.giphy
 
 import android.os.Bundle
+import android.view.View
+import android.widget.ProgressBar
 import android.widget.SearchView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -21,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     private var currentQuery = ""
 
-    // Save query if rotation
+    // save query if rotation
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("query", currentQuery)
@@ -42,6 +44,7 @@ class MainActivity : AppCompatActivity() {
         searchView.clearFocus()
 
 
+        // showing the grid
         adapter = GifAdapter(emptyList())
         recyclerView.layoutManager = GridLayoutManager(this, 2)
         recyclerView.adapter = adapter
@@ -53,8 +56,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        //progressbar
+        val progressBar = findViewById<ProgressBar>(R.id.progressBar)
 
-        // Search listener
+        lifecycleScope.launch {
+            viewModel.isLoading.collect { loading ->
+                progressBar.visibility = if (loading) View.VISIBLE else View.GONE
+            }
+        }
+
+
+        // search listener
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 searchView.clearFocus()
@@ -81,7 +93,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        //Scroll listener
+        //scroll listener
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (dy <= 0) return

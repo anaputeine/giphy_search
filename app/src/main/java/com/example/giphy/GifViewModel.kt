@@ -6,23 +6,27 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-// Manage GIF data
+
 class GifViewModel : ViewModel() {
-    //Pagination
+    //pagination
     private var currentOffset = 0
     private val PAGE_SIZE = 20
-    private var isLoading = false
     private var currentQuery = ""
 
-    //Basic search
+    //loading indicator
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
+
+    //basic search
     private val API_KEY = "UVkGDKGg6Hywlis2zQK2ERPWesm3GSoq"
     private val _gifs = MutableStateFlow<List<GifObject>>(emptyList())
     val gifs: StateFlow<List<GifObject>> = _gifs
 
 
-    // Search for GIFs
+    // search for GIFs
     fun searchGifs(query: String, isNextPage: Boolean = false) {
-        if (isLoading) return
+        if (_isLoading.value) return
 
 
         // new search
@@ -33,12 +37,12 @@ class GifViewModel : ViewModel() {
 
         // query is blank
         if (currentQuery.isBlank()) {
-            isLoading = false
+            _isLoading.value = false
             _gifs.value = emptyList()
             return
         }
 
-        isLoading = true
+        _isLoading.value = true
 
         viewModelScope.launch {
             try {
@@ -56,7 +60,7 @@ class GifViewModel : ViewModel() {
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
-                isLoading = false
+                _isLoading.value = false
             }
         }
     }
