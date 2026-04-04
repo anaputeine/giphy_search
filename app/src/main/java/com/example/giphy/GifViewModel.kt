@@ -23,7 +23,7 @@ class GifViewModel : ViewModel() {
     // Search for GIFs
     fun searchGifs(query: String, isNextPage: Boolean = false) {
         if (isLoading) return
-        isLoading = true
+
 
         // new search
         if (!isNextPage || query != currentQuery) {
@@ -37,6 +37,8 @@ class GifViewModel : ViewModel() {
             _gifs.value = emptyList()
             return
         }
+
+        isLoading = true
 
         viewModelScope.launch {
             try {

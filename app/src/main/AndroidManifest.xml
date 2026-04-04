@@ -5,6 +5,7 @@
     <application
         android:name=".MyApp"
         android:allowBackup="true"
+        android:configChanges="orientation|screenSize|keyboardHidden"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -14,6 +15,7 @@
         android:theme="@style/Theme.Giphy">
         <activity
             android:name=".MainActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

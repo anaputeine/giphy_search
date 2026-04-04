@@ -2,6 +2,7 @@ package com.example.giphy
 
 import android.os.Bundle
 import android.widget.SearchView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,17 +16,31 @@ class MainActivity : AppCompatActivity() {
     //Instant search
     private var searchJob: Job? = null
 
-    private val viewModel = GifViewModel()
+    private val viewModel: GifViewModel by viewModels()
     private lateinit var adapter: GifAdapter
 
     private var currentQuery = ""
+
+    // Save query if rotation
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("query", currentQuery)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         val searchView = findViewById<SearchView>(R.id.searchView)
+
+        // restore query and set if rotation
+        currentQuery = savedInstanceState?.getString("query") ?: ""
+        searchView.setQuery(currentQuery, false)
+        searchView.isIconified = false
+        searchView.clearFocus()
+
 
         adapter = GifAdapter(emptyList())
         recyclerView.layoutManager = GridLayoutManager(this, 2)
@@ -38,10 +53,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+
         // Search listener
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?) = false
-
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                searchView.clearFocus()
+                return true
+            }
             override fun onQueryTextChange(newText: String?): Boolean {
                 val query = newText ?: ""
 
