@@ -30,6 +30,29 @@ class MainActivity : AppCompatActivity() {
         outState.putString("query", currentQuery)
     }
 
+    //set error
+    private fun showErrorDialog(message: String) {
+        val dialog = android.app.AlertDialog.Builder(this)
+            .setTitle("Error")
+            .setMessage(message)
+            .setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+
+        dialog.show()
+    }
+
+    //internet handling
+
+    private fun isInternetAvailable(): Boolean {
+        val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as android.net.ConnectivityManager
+        val network = connectivityManager.activeNetwork ?: return false
+        val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+        return capabilities.hasCapability(android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -54,12 +77,24 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = GridLayoutManager(this, 2)
         recyclerView.adapter = adapter
 
-        // observe gifs from viewmodel
+        // observe gifs
         lifecycleScope.launch {
             viewModel.gifs.collect { gifs ->
                 adapter.updateGifs(gifs)
             }
         }
+
+        // observe errors
+        lifecycleScope.launch {
+            viewModel.error.collect { errorMessage ->
+                if (errorMessage != null) {
+                    showErrorDialog(errorMessage)
+                    viewModel.clearError()
+                }
+            }
+        }
+
+
 
         //progressbar
         val progressBar = findViewById<ProgressBar>(R.id.progressBar)

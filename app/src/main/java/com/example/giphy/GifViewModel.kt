@@ -17,6 +17,12 @@ class GifViewModel : ViewModel() {
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
+    //error handling
+    private val _error = MutableStateFlow<String?>(null)
+    val error: StateFlow<String?> = _error
+    fun clearError() {
+        _error.value = null
+    }
 
     //basic search
     private val API_KEY = "UVkGDKGg6Hywlis2zQK2ERPWesm3GSoq"
@@ -42,6 +48,7 @@ class GifViewModel : ViewModel() {
             return
         }
 
+        _error.value = null
         _isLoading.value = true
 
         viewModelScope.launch {
@@ -59,6 +66,11 @@ class GifViewModel : ViewModel() {
                 currentOffset += PAGE_SIZE
             } catch (e: Exception) {
                 e.printStackTrace()
+
+                _error.value = when (e) {
+                    is java.io.IOException -> "No internet connection"
+                    else -> "Something went wrong"
+                }
             } finally {
                 _isLoading.value = false
             }
