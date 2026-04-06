@@ -1,6 +1,5 @@
 package com.example.giphy
 
-import android.R.attr.onClick
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

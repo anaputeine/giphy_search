@@ -11,7 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="40dp">
+        android:paddingVertical="40dp"
+        android:paddingHorizontal="15dp">
+
 
         <SearchView
             android:id="@+id/searchView"
@@ -21,7 +23,7 @@
             android:saveEnabled="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:iconifiedByDefault="true"/>
+            android:iconifiedByDefault="false"/>
 
         <ProgressBar
             android:id="@+id/progressBar"

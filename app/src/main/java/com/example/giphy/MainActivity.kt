@@ -16,7 +16,7 @@ import kotlinx.coroutines.delay
 
 class MainActivity : AppCompatActivity() {
 
-    //Instant search
+    //instant search
     private var searchJob: Job? = null
 
     private val viewModel: GifViewModel by viewModels()
@@ -72,6 +72,10 @@ class MainActivity : AppCompatActivity() {
         adapter = GifAdapter(emptyList()) { gif ->
             val intent = Intent(this, GifActivity::class.java)
             intent.putExtra("gif_url", gif.images.fixed_height.url)
+            intent.putExtra("gif_title", gif.title)
+            intent.putExtra("gif_rating", gif.rating)
+            intent.putExtra("gif_upload_date", gif.import_datetime)
+            intent.putExtra("gif_trending", gif.trending_datetime)
             startActivity(intent)
         }
         recyclerView.layoutManager = GridLayoutManager(this, 2)

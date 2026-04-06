@@ -3,7 +3,10 @@ package com.example.giphy
 data class GifObject(
     val id: String,
     val title: String,
-    val images: Images
+    val images: Images,
+    val rating: String?,
+    val import_datetime: String?,
+    val trending_datetime: String?
 )
 
 data class Images(
