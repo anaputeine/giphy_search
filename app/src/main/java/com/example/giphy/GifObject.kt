@@ -4,9 +4,9 @@ data class GifObject(
     val id: String,
     val title: String,
     val images: Images,
-    val rating: String?,
-    val import_datetime: String?,
-    val trending_datetime: String?
+    val rating: String? = null,
+    val import_datetime: String? = null,
+    val trending_datetime: String? = null
 )
 
 data class Images(
