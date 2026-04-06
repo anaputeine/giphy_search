@@ -7,6 +7,7 @@ data class GifObject(
     val rating: String? = null,
     val import_datetime: String? = null,
     val trending_datetime: String? = null
+
 )
 
 data class Images(
