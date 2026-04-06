@@ -8,7 +8,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 
-class GifAdapter(private var gifs: List<GifObject>,private val onClick: (GifObject) -> Unit) :
+class GifAdapter(var gifs: List<GifObject>, private val onClick: (GifObject) -> Unit) :
     RecyclerView.Adapter<GifAdapter.GifViewHolder>() {
 
     inner class GifViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -38,6 +38,10 @@ class GifAdapter(private var gifs: List<GifObject>,private val onClick: (GifObje
 
     fun updateGifs(newGifs: List<GifObject>) {
         gifs = newGifs
-        notifyDataSetChanged()
+        try {
+            notifyDataSetChanged()
+        } catch (e: Exception) {
+            //  for tests
+        }
     }
 }

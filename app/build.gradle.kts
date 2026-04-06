@@ -47,6 +47,13 @@ dependencies {
     implementation("androidx.paging:paging-compose:3.3.6")
     implementation("androidx.paging:paging-runtime-ktx:3.3.6")
 
+    //Testing
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.mockito:mockito-core:5.7.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("app.cash.turbine:turbine:1.0.0")
+
     //Default
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

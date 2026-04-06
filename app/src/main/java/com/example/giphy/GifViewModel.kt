@@ -2,12 +2,16 @@ package com.example.giphy
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 
-class GifViewModel : ViewModel() {
+class GifViewModel(
+    //for testing
+    private val service: GifApi = GifClient.service, private val dispatcher: kotlinx.coroutines.CoroutineDispatcher = Dispatchers.IO
+) : ViewModel() {
     //pagination
     private var currentOffset = 0
     private val PAGE_SIZE = 20
